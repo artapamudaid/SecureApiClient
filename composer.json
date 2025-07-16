@@ -1,0 +1,14 @@
+{
+    "name": "artapamudaid/secure-api-client",
+    "description": "Secure API Client with HMAC Signature, Nonce, and Timestamp",
+    "type": "library",
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SecureApiClient\\": "src/"
+        }
+    }
+}
