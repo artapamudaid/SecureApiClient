@@ -1,5 +1,6 @@
 {
     "name": "artapamudaid/secure-api-client",
+    "version": "1.0.0",
     "description": "Secure API Client with HMAC Signature",
     "type": "library",
     "license": "MIT",
