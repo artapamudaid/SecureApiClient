@@ -1,7 +1,8 @@
 {
     "name": "artapamudaid/secure-api-client",
-    "description": "Secure API Client with HMAC Signature, Nonce, and Timestamp",
+    "description": "Secure API Client with HMAC Signature",
     "type": "library",
+    "license": "MIT",
     "require": {
         "php": ">=7.4",
         "ext-curl": "*"
