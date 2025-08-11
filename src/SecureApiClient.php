@@ -26,19 +26,24 @@ class SecureApiClient
         return hash_hmac('sha256', $data, $this->apiSecret);
     }
 
-    public function request(string $method, string $endpoint, array $payload = [])
+   public function request(string $method, string $endpoint, array $payload = [], bool $isMultipart = false)
     {
         $nonce = $this->generateNonce();
         $timestamp = time();
         $signature = $this->generateSignature($nonce, $timestamp);
 
+        // Default headers
         $headers = [
             "X-API-KEY: {$this->apiKey}",
             "X-NONCE: {$nonce}",
             "X-TIMESTAMP: {$timestamp}",
             "X-API-SIGNATURE: {$signature}",
-            "Content-Type: application/json",
         ];
+
+        // Jika bukan multipart, set content type JSON
+        if (!$isMultipart) {
+            $headers[] = "Content-Type: application/json";
+        }
 
         $url = $this->baseUrl . $endpoint;
         $ch = curl_init($url);
@@ -48,7 +53,15 @@ class SecureApiClient
 
         if (strtoupper($method) === 'POST') {
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+            if ($isMultipart) {
+                // multipart/form-data (file + data lain)
+                // contoh: $payload['photo'] = new CURLFile('/path/to/file.jpg');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            } else {
+                // JSON request
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+            }
         } elseif (strtoupper($method) === 'GET' && !empty($payload)) {
             $url .= '?' . http_build_query($payload);
             curl_setopt($ch, CURLOPT_URL, $url);
